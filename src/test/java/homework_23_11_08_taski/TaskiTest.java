@@ -1,4 +1,4 @@
-package homework_23_11_08;
+package homework_23_11_08_taski;
 
 import org.junit.jupiter.api.Test;
 

@@ -2,14 +2,13 @@ package homework_23_11_06;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class PaymentServiceTest {
 
     ExternalPaymentApi externalPaymentApi = Mockito.mock(ExternalPaymentApi.class);
     PaymentService paymentService = new PaymentService(externalPaymentApi);
-    Order order = new Order("abc123", 100, false);
+    Order order = new Order("abc123", 100, true);
 
     @Test
     void processPaymentPositiveTest() {
@@ -20,5 +19,16 @@ class PaymentServiceTest {
 
         Mockito.verify(externalPaymentApi).requestPayment(order);
         Mockito.verify(externalPaymentApi).verifyPayment(order.getId());
+    }
+
+    @Test
+    void processPaymentNegativeTest() {
+        Mockito.when(externalPaymentApi.requestPayment(order)).thenReturn(false);
+        Mockito.when(externalPaymentApi.verifyPayment(order.getId())).thenReturn(false);
+        boolean result = paymentService.processPayment(order);
+        assertFalse(result);
+
+        Mockito.verify(externalPaymentApi).requestPayment(order);
+
     }
 }

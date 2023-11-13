@@ -167,6 +167,10 @@ public class Main {
         System.out.println(workWithList.createListWithUniqueStrings(list_array6));
         System.out.println(workWithList.connectAllString(list_linked4));
         workWithList.sortMyListWithDifferentCriterias(linkedMyClass2);
+
+        System.out.println();
+        System.out.println(workWithList.test1(list_array6, 4));
+        System.out.println(workWithList.test2(list_array1));
     }
 }
 

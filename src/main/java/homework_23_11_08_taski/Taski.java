@@ -1,4 +1,4 @@
-package homework_23_11_08;
+package homework_23_11_08_taski;
 
 import java.util.List;
 
@@ -47,12 +47,13 @@ public class Taski {
 
     // 3. Поиск и подсчет указанных символов в строке
     //    j= "ahT"
-    //    s = "uyahhTyRthh"     количество вх-я букв
+    //    s = "uyahhTyRthh"     количество вх-х букв
     public int task3(String str) {
         List<String> letters = List.of(str.split(""));
         int countA = (int) letters.stream().filter(el -> el.contains("a")).count();
         int countH = (int) letters.stream().filter(el -> el.contains("h")).count();
         int countT = (int) letters.stream().filter(el -> el.contains("T")).count();
         return countA + countH + countT;
+
     }
 }

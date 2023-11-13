@@ -355,6 +355,32 @@ public class WorkWithList {
         Collections.sort(newList, new CategoryComparator());
         System.out.println(newList);
     }
+
+
+    // метод 1.
+    public List<String> test1(List<String> list, int number) {
+        List<String> newList = new ArrayList<>();
+        for (String i : list) {
+            if (number == i.length()) {
+                newList.add(i);
+            }
+        }
+        return newList;
+    }
+
+    // метод 2.
+    public List<Integer> test2(List<Integer> list) {
+        List<Integer> newList = new ArrayList<>();
+        for (Integer i : list) {
+            if (i % 2 != 0) {
+                newList.add(i);
+            }
+        }
+        list.clear();
+        list.addAll(newList);
+        return list;
+    }
+
 }
 
 

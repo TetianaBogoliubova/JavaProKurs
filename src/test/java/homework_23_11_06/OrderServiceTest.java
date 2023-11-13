@@ -15,7 +15,7 @@ class OrderServiceTest {
     private PaymentService paymentService;
 
     @Test
-    void placeOrderTest() {
+    void placeOrderPositiveTest() {
 
         Order order = new Order("abc123", 100, false);
         OrderService orderService1 = new OrderService(paymentService);
@@ -23,6 +23,19 @@ class OrderServiceTest {
         Mockito.when(paymentService.processPayment(order)).thenReturn(true);
         orderService1.placeOrder(order);
         assertTrue(order.isPaid());
+
+        Mockito.verify(paymentService).processPayment(order);
+    }
+
+    @Test
+    void placeOrderNegativeTest() {
+
+        Order order = new Order("abc123", 100, false);
+        OrderService orderService1 = new OrderService(paymentService);
+
+        Mockito.when(paymentService.processPayment(order)).thenReturn(false);
+        orderService1.placeOrder(order);
+        assertFalse(order.isPaid());
 
         Mockito.verify(paymentService).processPayment(order);
     }
