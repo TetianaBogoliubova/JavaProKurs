@@ -13,8 +13,11 @@ public class MethodsAndTestsForDataBase {
     private static final List<String> allFirstNames = new ArrayList<>();
     private static final List<String> allLastNames = new ArrayList<>();
     private static final Map<String, String> namesAndPhoneNumbers = new HashMap<>();
+    private static final List<Map.Entry<String, String>> minLongList = new ArrayList<>();
+    private static final List<Map.Entry<String, String>> maxLongList = new ArrayList<>();
 
-    public List<String> readerWriterDB1(String fileName) {
+    // 1.
+    public List<String> readerWriterDB(String fileName) {
         List<String> nameList = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName));
              BufferedWriter writer = new BufferedWriter(new FileWriter("buffered.txt"))) {
@@ -29,6 +32,7 @@ public class MethodsAndTestsForDataBase {
         return nameList;
     }
 
+    // 2.
     public void createNewCollectionsWithData(List<String> list) {
         for (String i : list) {
             List<String> newList = List.of(i.split("[\\s]+"));
@@ -44,57 +48,46 @@ public class MethodsAndTestsForDataBase {
                 firstName = newList.get(newList.size() - 3);
                 lastName = newList.get(newList.size() - 2);
             }
-
             allPhoneNumbers.add(phoneNumber);
             allFirstNames.add(firstName);
             allLastNames.add(lastName);
             namesAndPhoneNumbers.put(firstName, phoneNumber);
         }
-        System.out.println(namesAndPhoneNumbers);
-        //System.out.println(phoneNumber + "**" + firstName + "*" + lastName);
-        System.out.println(allFirstNames);
-        // System.out.println(allLastNames);
+        // Для проверки списков:
+        //System.out.println(allPhoneNumbers);
+        //System.out.println(allFirstNames);
+        //System.out.println(allLastNames);
+        //System.out.println(namesAndPhoneNumbers);
     }
 
-    // 1. Метод для создания мапы, где ключ - первая буква имени, а значение - количество таких имен
-    public void getMapOfNames() {
+    // 3. Метод для создания мапы, где ключ - первая буква имени, а значение - количество таких имен
+    public Map<String, Integer> getMapOfNames() {
         Map<String, Integer> mapOfNames = new HashMap<>();
-        String key = "";
         Integer value;
         for (String i : allFirstNames) {
             value = mapOfNames.get(i);
             if (value == null) {
                 value = 0;
             }
-
             mapOfNames.put(i, value + 1);
         }
-        System.out.println(mapOfNames);
-
-        for (Map.Entry<String, Integer> i : mapOfNames.entrySet()) {
-            key = i.getKey().substring(0, 1);
-
-        }
-        System.out.println(key);
+        return mapOfNames;
     }
 
-    // 2.- Метод для нахождения самой часто встречающейся первой буквы в именах
-
-    public void getFirstLetterOfNames() {
+    // 4. Метод для нахождения самой часто встречающейся первой буквы в именах
+    public Map<String, Integer> getFirstLetterOfNames() {
         Map<String, Integer> mapOfNames = new HashMap<>();
         String key;
-        Integer value;
         for (String i : allFirstNames) {
             key = i.substring(0, 1);
-            value = mapOfNames.getOrDefault(key, 0);
-            mapOfNames.put(key, value + 1);
+            mapOfNames.put(key, mapOfNames.getOrDefault(key, 0) + 1);//value + 1);
         }
-        mapOfNames.entrySet().stream()
+        return mapOfNames.entrySet().stream()
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
-                .forEach(System.out::println);
+                .collect(Collectors.toMap(str -> str.getKey(), str -> str.getValue(), (e1, e2) -> e1, () -> new LinkedHashMap<>()));
     }
 
-    // 3.- Метод для создания списка номеров телефонов, где каждый номер преобразован в числовой формат
+    // 5. Метод для создания списка номеров телефонов, где каждый номер преобразован в числовой формат
 
     public List<Long> getListOfPhoneNumbersLikeDigit() {
         return allPhoneNumbers.stream()
@@ -102,8 +95,8 @@ public class MethodsAndTestsForDataBase {
                 .collect(Collectors.toList());
     }
 
-    // 4.- Метод для группировки имен по длине имени
-    public void groupNamesByLong() {
+    // 6. Метод для группировки имен по длине имени
+    public Map<String, Integer> groupNamesByLong() {
         Map<String, Integer> mapGroupNames = new HashMap<>();
         int longOfName;
         for (String i : allFirstNames) {
@@ -112,24 +105,24 @@ public class MethodsAndTestsForDataBase {
                 mapGroupNames.put(i, longOfName);
             }
         }
-        System.out.println(mapGroupNames);
+        return mapGroupNames;
     }
 
-    // 5. - Метод для поиска уникальных фамилий
+    // 7. Метод для поиска уникальных фамилий
     public List<String> getUniqueLastNames() {
         return allLastNames.stream()
                 .distinct()
                 .collect(Collectors.toList());
     }
 
-    // 6. - Метод для создания списка имен, отсортированного в обратном алфавитном порядке
+    // 8. Метод для создания списка имен, отсортированного в обратном алфавитном порядке
     public List<String> getListWithReversOrder() {
         allFirstNames.sort(Collections.reverseOrder());
         return allFirstNames;
     }
 
 
-    // 7. - Метод для преобразования данных в формат имя=номер
+    // 9. Метод для преобразования данных в формат имя=номер
     //Смотреть метод createNewCollectionsWithData(List<String> list) или создать идентичный:
     public Map<String, String> getMapWithNamesAndPhoneNumbers(List<String> list) {
 
@@ -154,8 +147,7 @@ public class MethodsAndTestsForDataBase {
         return newMap;
     }
 
-    // 8. - Метод для расчета средней длины имен
-
+    // 10. Метод для расчета средней длины имен
     public int getAverageLongOfName() {
         return (int) allFirstNames.stream()
                 .mapToInt(el -> el.length())
@@ -163,7 +155,7 @@ public class MethodsAndTestsForDataBase {
                 .orElse(0);
     }
 
-    // 9. - Метод для создания карты, где ключ - номер телефона, а значение - имя
+    // 11. Метод для создания карты, где ключ - номер телефона, а значение - имя
     public Map<String, String> getMapWithPhoneNumbersAndNames() {
         Map<String, String> newMap = new HashMap<>();
         for (Map.Entry i : namesAndPhoneNumbers.entrySet()) {
@@ -172,19 +164,17 @@ public class MethodsAndTestsForDataBase {
         return newMap;
     }
 
-    // 10. - Метод для поиска контактов с максимальной и минимальной длиной имени
+    // 12. Метод для поиска контактов с максимальной и минимальной длиной имени
     public void searchNamesAndPhoneNumbersByLongOfNames() {
         Map.Entry<String, String> minLongMap = null;
         Map.Entry<String, String> maxLongMap = null;
-
-        List<Map.Entry<String, String>> minLongList = new ArrayList<>();
-        List<Map.Entry<String, String>> maxLongList = new ArrayList<>();
 
         for (Map.Entry<String, String> i : namesAndPhoneNumbers.entrySet()) {
             if (minLongMap == null || i.getKey().length() < minLongMap.getKey().length()) {
                 minLongMap = i;
                 minLongList.clear();
                 minLongList.add(i);
+
             } else if (i.getKey().length() == Objects.requireNonNull(minLongMap.getKey()).length()) {
                 minLongList.add(i);
             }
@@ -196,13 +186,19 @@ public class MethodsAndTestsForDataBase {
                 maxLongList.add(i);
             }
         }
+        System.out.println("М-12. Контакты с максимальной и минимальной длиной имени: ");
         maxLongList.forEach(System.out::println);
         minLongList.forEach(System.out::println);
+    }
 
+    // 13.
+    public List<Map.Entry<String, String>> getMinLongList() {
+        return minLongList;
+    }
+
+    public List<Map.Entry<String, String>> getMaxLongList() {
+        return maxLongList;
     }
 }
-
-
-
 
 
