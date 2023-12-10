@@ -21,9 +21,9 @@ public class Calculator {
         }
     }
 }
-/////
+//          *** исправленный ***
 
- class CalculatorCorrect {
+class CalculatorCorrect {
 
     public int add(int a, int b) {
         return a + b;
@@ -37,7 +37,7 @@ public class Calculator {
         return a * b;
     }
 
-    public int divide(int a, int b) {//поменять на double
+    public double divide(int a, int b) {
         if (b != 0) {
             return a / b;
         } else {

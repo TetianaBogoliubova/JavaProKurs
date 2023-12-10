@@ -14,7 +14,8 @@ public class D1 {
 
 }
 
- class D1Correct {
+//          *** исправленный ***
+class D1Correct {
     public double getAverageValue(List<Double> list) {
         double sum = 0;
         for (double i : list) {
@@ -22,10 +23,14 @@ public class D1 {
         }
         return sum / list.size();
 
-        //list.stream().average().getAsDouble();
+//        *** или ***
+//        return list.stream()
+//                .mapToDouble(Double::doubleValue)
+//                .average()
+//                .orElse(0.0);
     }
+}
 
 
-     }
-// }
-//}
+
+
